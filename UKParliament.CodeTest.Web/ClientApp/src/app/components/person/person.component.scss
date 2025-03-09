@@ -1,0 +1,92 @@
+@import 'variables';
+
+section.content-container {
+
+    .error-message {
+        font-size: 1rem;
+        border: 1px solid #ddd;
+        padding: 10px 15px;
+        margin-bottom: 10px;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        color: #fff;
+        background-color: $error-action-color;
+    }
+
+    .form-group {
+        margin-bottom: $spacing-unit;
+        display: flex;
+        flex-direction: column;
+        gap: calc($spacing-unit / 2);
+
+        label {
+            display: block;
+            font-weight: bold;
+
+            .required {
+                color: $error-color;
+            }
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            font-size: 0.9rem;
+
+            &:focus {
+                border-color: $primary-color;
+                outline: none;
+                box-shadow: 0 0 5px rgba($primary-color, 0.5);
+            }
+
+            &.ng-invalid.ng-touched {
+                border: 2px solid $error-color;
+            }
+        }
+
+        .dob-group {
+            display: flex;
+
+            @media (min-width: 320px) {
+                flex-direction: row;
+                justify-content: space-between;
+
+                select {
+                    width: 32%;
+                }
+            }
+
+            @media (max-width: 320px) {
+                flex-direction: column;
+
+                select {
+                    width: 100%;
+                    margin-top: $spacing-unit;
+                }
+            }
+        }
+
+        .label-group
+        {
+            display: flex;
+            flex-direction: row;
+
+            @media (max-width: 420px) {
+                justify-content: space-between;
+            }
+
+            .validation-error {
+                color: $error-color;
+                font-size: 0.85rem;
+                font-weight: bolder;
+
+                @media (max-width: 420px) {
+                    margin-left: 8px;
+                }                
+            }
+        }
+    }
+}

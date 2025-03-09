@@ -1,3 +1,18 @@
-<div class="container">
-  <router-outlet></router-outlet>
+<app-loading-overlay
+  [isVisible]="loadingState.isVisible"
+  [message]="loadingState.message"
+></app-loading-overlay>
+
+<div class="app-container">
+  <app-header></app-header>
+  
+  <main>
+    <div class="container">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+  
+  <app-footer></app-footer>
 </div>
+
+<app-toast></app-toast>

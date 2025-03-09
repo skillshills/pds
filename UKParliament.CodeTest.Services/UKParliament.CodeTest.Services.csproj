@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\UKParliament.CodeTest.Infrastructure\UKParliament.CodeTest.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

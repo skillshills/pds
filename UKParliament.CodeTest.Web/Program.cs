@@ -1,6 +1,13 @@
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using UKParliament.CodeTest.Data;
-using UKParliament.CodeTest.Services;
+using UKParliament.CodeTest.Application.Services;
+using UKParliament.CodeTest.Domain.Repositories;
+using UKParliament.CodeTest.Domain.Services;
+using UKParliament.CodeTest.Infrastructure.DataContexts;
+using UKParliament.CodeTest.Infrastructure.Repositories;
+using UKParliament.CodeTest.Web.Middleware;
+using UKParliament.CodeTest.Web.Validators;
+using UKParliament.CodeTest.Web.ViewModels;
 
 namespace UKParliament.CodeTest.Web;
 
@@ -10,13 +17,22 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
+        builder.Services.AddScoped<IPersonService, PersonService>();
+        builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+
+        builder.Services.AddScoped<IPersonRepository, PersonRepository>();
+        builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+
+        // Add exception handling middleware globally
+        builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+        builder.Services.AddProblemDetails();
+
+        // Add validators for controllers
+        builder.Services.AddScoped<IValidator<PersonViewModel>, PersonRequestValidator>();
 
         builder.Services.AddControllersWithViews();
 
         builder.Services.AddDbContext<PersonManagerContext>(op => op.UseInMemoryDatabase("PersonManager"));
-
-        builder.Services.AddScoped<IPersonService, PersonService>();
 
         var app = builder.Build();
 
@@ -33,6 +49,9 @@ public class Program
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
+
+        // Add exception handling middleware globally
+        app.UseExceptionHandler();
 
         app.UseHttpsRedirection();
         app.UseStaticFiles();

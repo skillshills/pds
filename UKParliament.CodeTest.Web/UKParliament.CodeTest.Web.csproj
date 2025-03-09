@@ -8,11 +8,14 @@
     <SpaProxyServerUrl>https://localhost:44416</SpaProxyServerUrl>
     <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>45e52636-6b62-435f-8bf9-45083f0c6786</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="6.0.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.11" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,8 +26,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\UKParliament.CodeTest.Data\UKParliament.CodeTest.Data.csproj" />
-    <ProjectReference Include="..\UKParliament.CodeTest.Services\UKParliament.CodeTest.Services.csproj" />
+    <Folder Include="ClientApp\src\app\components\person\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\UKParliament.CodeTest.Application\UKParliament.CodeTest.Application.csproj" />
   </ItemGroup>
 
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
