@@ -26,6 +26,7 @@ section.content-container {
 
         a {
             flex-grow: 1;
+            color: $primary-color;
             border: 1px solid #ddd;
             background-color: #f9f9f9;
             padding: 10px 15px;
@@ -43,6 +44,10 @@ section.content-container {
 
             &:focus {
                 outline: 2px solid darken(#f9f9f9, 15%);
+            }
+
+            &:active {
+                background: darken(#f9f9f9, 20%);
             }
 
             .person-name {

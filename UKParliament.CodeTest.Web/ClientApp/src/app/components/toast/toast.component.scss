@@ -1,5 +1,13 @@
 @import 'variables';
 
+@mixin toast-variant($base-color) {
+    background-color: $base-color;
+    
+    .dismiss-btn svg {
+        color: #fff;
+    }
+}
+
 .toast-container {
     position: fixed;
     bottom: 50px;
@@ -10,57 +18,55 @@
         max-width: 800px;
         width: 95%;
     }
-}
 
-.toast {
-    margin-bottom: 10px;
-    padding: 6px;
-    border-radius: 6px;
-    color: #fff;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    opacity: 0.9;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: opacity 0.3s ease;
-    gap: $spacing-unit;
-}
+    .toast {
+        margin-bottom: 10px;
+        padding: 12px 14px;
+        border-radius: 6px;
+        color: #fff;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        opacity: 0.9;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: opacity 0.3s ease;
+        gap: $spacing-unit;
 
-.dismiss-btn {
-    fill: #333;
-    border: none;
-    border-radius: 6px;
-    padding: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+        .dismiss-btn {
+            background: none;
+            border: none;
+            border-radius: 6px;
+            padding: 6px;
+            cursor: pointer;
+        
+            svg {
+                width: 16px;
+                height: 16px;
+            }
+        
+            &:hover {
+                background: darken(#efefef, 10%);
+            }
+        
+            &:focus {
+                outline: 2px solid darken(#efefef, 15%);
+            }
+        }
 
-    svg {
-        fill: #333;
-        width: 22px;
-        height: 22px;
+        &.info {
+            @include toast-variant($info-action-color);
+        }
+        
+        &.success {
+            @include toast-variant($success-action-color);
+        }
+        
+        &.error {
+            @include toast-variant($error-action-color);
+        }
+        
+        &.warning {
+            @include toast-variant($warning-action-color);
+        }
     }
-
-    &:hover {
-        background: darken(#efefef, 10%);
-    }
-
-    &:focus {
-        outline: 2px solid darken(#efefef, 15%);
-    }
-}
-
-.toast.info {
-    background-color: #2196f3;
-}
-
-.toast.success {
-    background-color: #228b22;
-}
-
-.toast.error {
-    background-color: $danger-action-color;
-}
-
-.toast.warning {
-    background-color: $cancel-action-color;
 }

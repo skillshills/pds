@@ -1,8 +1,7 @@
 // Color Variables
 $primary-color: #373151;
-$secondary-color: #2ecc71;
 $text-color: #333;
-$error-color: #d32f2f;
+$error-color: #A52222;
 $background-color: #f4f4f4;
 
 // Fonts
@@ -16,6 +15,8 @@ $max-width: 800px;
 
 //actions
 $primary-action-color: $primary-color;
-$danger-action-color: #d32f2f;
+$error-action-color: $error-color;
+$success-action-color: #175E17;
 $cancel-action-color: #f4f4f4;
-$error-action-color: #e74c3c;
+$info-action-color: #0C599C;
+$warning-action-color : #7A4E00;

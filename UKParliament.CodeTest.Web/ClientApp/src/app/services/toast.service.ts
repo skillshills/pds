@@ -15,7 +15,7 @@ export class ToastService {
     this.toasts.push(toast);
     
     if (autoHide) {
-      //setTimeout(() => this.removeToast(toast), toast.duration);
+      setTimeout(() => this.removeToast(toast), toast.duration);
     }
   }
 
