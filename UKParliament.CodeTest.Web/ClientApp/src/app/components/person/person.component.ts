@@ -29,6 +29,8 @@ export class PersonComponent implements OnInit {
   });
   years: number[] = [];
   dobInvalid: boolean = false;
+  dobInvalidMessage: string = 'required';
+  formSubmitted: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -114,39 +116,53 @@ export class PersonComponent implements OnInit {
     return this.personForm.get(fieldName)?.invalid && this.personForm.get(fieldName)?.touched;
   }
 
+  isFieldEmpty(fieldName: string): boolean {
+    const value = this.personForm.get(fieldName)?.value;
+    return value === '' || value === null || value === undefined;
+  }
+
   validateDOB() {
+    this.dobInvalid = false;
+    this.dobInvalidMessage = 'required';
+
+    // Check if any date field is empty and has been touched
+    const dayEmpty = this.isFieldEmpty('day');
+    const monthEmpty = this.isFieldEmpty('month');
+    const yearEmpty = this.isFieldEmpty('year');
+    
+    // If any field is invalid and touched, mark DOB as invalid
     if (this.formControlIsValid('day') || this.formControlIsValid('month') || this.formControlIsValid('year')) {
       this.dobInvalid = true;
       return;
     }
-
+    
+    // If any field is empty, we can't validate the date yet
+    if (dayEmpty || monthEmpty || yearEmpty) {
+      // Only mark as invalid if they've attempted to submit the form
+      this.dobInvalid = !!this.personForm.get('day')?.touched || 
+                        !!this.personForm.get('month')?.touched || 
+                        !!this.personForm.get('year')?.touched;
+      return;
+    }
+  
     const { day, month, year } = this.personForm.value;
-    const dateOfBirth = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    const dateOfBirth = new Date(year, (month - 1), day);
 
-    if (!this.isValidDate(dateOfBirth)) {
+    if (!(dateOfBirth.getFullYear() === Number(year) 
+          && dateOfBirth.getMonth() === Number(month - 1) 
+          && dateOfBirth.getDate() === Number(day))) {
       this.dobInvalid = true;
+      this.dobInvalidMessage = 'invalid date';
       return;
     }
 
-    const dob = new Date(dateOfBirth);
     const today = new Date();
-
-    this.dobInvalid = dob >= today;
-  }
-
-  isValidDate(dateString: string): boolean {
-    const date = new Date(dateString);
-    if (isNaN(date.getTime())) {
-      return false; // Invalid date
-    }
-
-    // Ensure the components match the input
-    const [year, month, day] = dateString.split('-').map(Number);
-    return (
-      date.getFullYear() === year &&
-      date.getMonth() + 1 === month &&
-      date.getDate() === day
-    );
+  
+    if(dateOfBirth >= today) {
+      this.dobInvalid = true;
+      this.dobInvalidMessage = 'must be in the past';
+      return;
+    };
   }
 
   // Mark all form controls as touched to trigger validation messages
@@ -157,7 +173,9 @@ export class PersonComponent implements OnInit {
   }
 
   onSubmit() {
+    this.formSubmitted = true;
     this.markAllAsTouched();
+    this.validateDOB(); // Explicitly validate DOB on submit
 
     if (this.personForm.valid && !this.dobInvalid) {
       const { day, month, year, ...rest } = this.personForm.value;
@@ -169,8 +187,11 @@ export class PersonComponent implements OnInit {
       if (this.isUpdateMode && this.personId) {
         // Call update service
         personData.id = this.personId;
+
         this.updatePerson(personData);
-      } else {
+      } 
+      else 
+      {
         // Call create service
         this.createPerson(personData);
       }

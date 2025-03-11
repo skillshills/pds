@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using UKParliament.CodeTest.Application.Extensions;
 using UKParliament.CodeTest.Domain.Services;
-using UKParliament.CodeTest.Web.Extensions;
-using UKParliament.CodeTest.Web.ViewModels;
+using UKParliament.CodeTest.Domain.ViewModels;
 
 namespace UKParliament.CodeTest.Web.Controllers;
 

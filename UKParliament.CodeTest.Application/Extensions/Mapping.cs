@@ -1,7 +1,7 @@
 ﻿using UKParliament.CodeTest.Domain.Models;
-using UKParliament.CodeTest.Web.ViewModels;
+using UKParliament.CodeTest.Domain.ViewModels;
 
-namespace UKParliament.CodeTest.Web.Extensions;
+namespace UKParliament.CodeTest.Application.Extensions;
 
 public static class Mapping
 {

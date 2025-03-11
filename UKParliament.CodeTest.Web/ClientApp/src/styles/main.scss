@@ -53,14 +53,13 @@ main {
   }
 }
 
-button.primary-btn, button.danger-btn, button.cancel-btn {
+button.primary-btn, button.cancel-btn {
   width: 100%;
   padding: $spacing-unit;
-  border: none;
   border-radius: calc($spacing-unit / 4);
   font-size: 16px; 
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.4s ease;
 }
 
 button.primary-btn {
@@ -68,30 +67,19 @@ button.primary-btn {
   color: #ffffff;
 
   &:hover {
-    background: darken($primary-action-color, 10%);
+    background: lighten($primary-action-color, 20%);
   }
 
   &:focus {
-    outline: 2px solid darken($primary-action-color, 15%);
-  }
-}
-
-button.danger-btn {
-  background: $danger-action-color;
-  color: #fff;
-
-  &:hover {
-    background: darken($danger-action-color, 10%);
-  }
-
-  &:focus {
-    outline: 2px solid darken($danger-action-color, 15%);
+    background: lighten($primary-action-color, 20%);
+    outline: 2px solid lighten($primary-action-color, 25%);
   }
 }
 
 button.cancel-btn {
   background: $cancel-action-color;
-  color: #fff;
+  border: 2px solid $primary-action-color;
+  color: $primary-action-color;
 
   &:hover {
     background: darken($cancel-action-color, 10%);

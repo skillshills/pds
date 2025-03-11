@@ -1,17 +1,16 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using UKParliament.CodeTest.Application.Extensions;
 using UKParliament.CodeTest.Domain.Services;
-using UKParliament.CodeTest.Web.Extensions;
-using UKParliament.CodeTest.Web.ViewModels;
+using UKParliament.CodeTest.Domain.ViewModels;
 
 namespace UKParliament.CodeTest.Web.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PersonController(IDepartmentService departmentService, IPersonService personService, IValidator<PersonViewModel> validator) : ControllerBase
+public class PersonController(IPersonService personService, IValidator<PersonViewModel> validator) : ControllerBase
 {
     private readonly IPersonService _personService = personService;
-    private readonly IDepartmentService _departmentService = departmentService;
 
     [Route("{id:int}", Name = nameof(GetPersonByIdAsync))]
     [HttpGet]

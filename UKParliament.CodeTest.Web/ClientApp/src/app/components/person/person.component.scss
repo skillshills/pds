@@ -19,12 +19,36 @@ section.content-container {
         flex-direction: column;
         gap: calc($spacing-unit / 2);
 
-        label {
-            display: block;
-            font-weight: bold;
+        &.has-error {
+            color: $error-color;
+        }
 
-            .required {
+        .label-group
+        {
+            display: flex;
+            flex-direction: row;
+
+            @media (max-width: 410px) {
+                justify-content: space-between;
+            }
+
+            label {
+                display: block;
+                font-weight: bold;
+    
+                .required {
+                    color: $error-color;
+                }
+            }
+
+            .validation-error {
                 color: $error-color;
+                font-size: 0.85rem;
+                font-weight: bolder;
+
+                @media (min-width: 420px) {
+                    margin-left: 8px;
+                }                
             }
         }
 
@@ -37,20 +61,27 @@ section.content-container {
             font-size: 0.9rem;
 
             &:focus {
-                border-color: $primary-color;
-                outline: none;
-                box-shadow: 0 0 5px rgba($primary-color, 0.5);
+            border-color: $primary-color;
+            outline: none;
+            box-shadow: 0 0 5px rgba($primary-color, 0.5);
             }
 
             &.ng-invalid.ng-touched {
-                border: 2px solid $error-color;
+            border: 2px solid $error-color;
+            }
+        }
+
+        &.has-error {
+            input,
+            select {
+            border-color: $error-color;
             }
         }
 
         .dob-group {
             display: flex;
 
-            @media (min-width: 320px) {
+            @media (min-width: 410px) {
                 flex-direction: row;
                 justify-content: space-between;
 
@@ -59,33 +90,17 @@ section.content-container {
                 }
             }
 
-            @media (max-width: 320px) {
+            @media (max-width: 410px) {
                 flex-direction: column;
 
                 select {
                     width: 100%;
                     margin-top: $spacing-unit;
                 }
-            }
-        }
 
-        .label-group
-        {
-            display: flex;
-            flex-direction: row;
-
-            @media (max-width: 420px) {
-                justify-content: space-between;
-            }
-
-            .validation-error {
-                color: $error-color;
-                font-size: 0.85rem;
-                font-weight: bolder;
-
-                @media (max-width: 420px) {
-                    margin-left: 8px;
-                }                
+                select:first-child {
+                    margin-top: 0;
+                }
             }
         }
     }

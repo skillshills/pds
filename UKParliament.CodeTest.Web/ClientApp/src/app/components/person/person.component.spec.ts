@@ -243,7 +243,6 @@ describe('PersonComponent', () => {
         it('should mark dobInvalid as true for an invalid date 31-FEB-2023', () => {
             spyOn(component, 'formControlIsValid').and.returnValue(false);
             component.personForm.setValue({ firstname: 'Joe', lastname: 'Blogs', departmentId: 101, day: 31, month: 2, year: 2023 });
-            spyOn(component, 'isValidDate').and.returnValue(false);
 
             component.validateDOB();
 
@@ -265,8 +264,6 @@ describe('PersonComponent', () => {
                 year: futureDate.getFullYear(),
             });
 
-            spyOn(component, 'isValidDate').and.returnValue(true);
-
             component.validateDOB();
 
             // Assertions
@@ -276,7 +273,16 @@ describe('PersonComponent', () => {
         it('should mark dobInvalid as false for a valid date in the past', () => {
             spyOn(component, 'formControlIsValid').and.returnValue(false);
             component.personForm.setValue({ firstname: 'Joe', lastname: 'Blogs', departmentId: 101, day: 14, month: 3, year: 1978 });
-            spyOn(component, 'isValidDate').and.returnValue(true);
+
+            component.validateDOB();
+
+            // Assertions
+            expect(component.dobInvalid).toBeFalse();
+        });
+
+        it('should mark dobInvalid as false for a valid leap year date in the past', () => {
+            spyOn(component, 'formControlIsValid').and.returnValue(false);
+            component.personForm.setValue({ firstname: 'Joe', lastname: 'Blogs', departmentId: 101, day: 29, month: 2, year: 2024 });
 
             component.validateDOB();
 

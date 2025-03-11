@@ -2,8 +2,9 @@
 using Moq;
 using UKParliament.CodeTest.Domain.Models;
 using UKParliament.CodeTest.Domain.Services;
+using UKParliament.CodeTest.Domain.ViewModels;
 using UKParliament.CodeTest.Web.Validators;
-using UKParliament.CodeTest.Web.ViewModels;
+
 using Xunit;
 
 namespace UKParliament.CodeTest.Tests.PresentationLayer.Validators;

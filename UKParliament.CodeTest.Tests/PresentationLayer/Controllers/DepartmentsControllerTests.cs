@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
+using UKParliament.CodeTest.Application.Extensions;
 using UKParliament.CodeTest.Domain.Models;
 using UKParliament.CodeTest.Domain.Services;
+using UKParliament.CodeTest.Domain.ViewModels;
 using UKParliament.CodeTest.Web.Controllers;
-using UKParliament.CodeTest.Web.Extensions;
-using UKParliament.CodeTest.Web.ViewModels;
 using Xunit;
 
 namespace UKParliament.CodeTest.Tests.PresentationLayer.Controllers;

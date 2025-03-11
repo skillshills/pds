@@ -1,4 +1,4 @@
-﻿namespace UKParliament.CodeTest.Web.ViewModels;
+﻿namespace UKParliament.CodeTest.Domain.ViewModels;
 
 public class DepartmentViewModel
 {

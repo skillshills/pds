@@ -1,6 +1,6 @@
-﻿using UKParliament.CodeTest.Domain.Models;
-using UKParliament.CodeTest.Web.Extensions;
-using UKParliament.CodeTest.Web.ViewModels;
+﻿using UKParliament.CodeTest.Application.Extensions;
+using UKParliament.CodeTest.Domain.Models;
+using UKParliament.CodeTest.Domain.ViewModels;
 using Xunit;
 
 namespace UKParliament.CodeTest.Tests.PresentationLayer.Mapping;

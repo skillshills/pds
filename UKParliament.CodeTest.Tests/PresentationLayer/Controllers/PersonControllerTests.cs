@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using UKParliament.CodeTest.Domain.Models;
 using UKParliament.CodeTest.Domain.Services;
+using UKParliament.CodeTest.Domain.ViewModels;
 using UKParliament.CodeTest.Web.Controllers;
-using UKParliament.CodeTest.Web.ViewModels;
 using Xunit;
 
 namespace UKParliament.CodeTest.Tests.PresentationLayer.Controllers;
@@ -20,9 +20,8 @@ public class PersonControllerTests
     public PersonControllerTests()
     {
         _personServiceMock = new Mock<IPersonService>();
-        _departmentServiceMock = new Mock<IDepartmentService>();
         _validatorMock = new Mock<IValidator<PersonViewModel>>();
-        _controller = new PersonController(_departmentServiceMock.Object, _personServiceMock.Object, _validatorMock.Object);
+        _controller = new PersonController(_personServiceMock.Object, _validatorMock.Object);
     }
 
     [Fact]

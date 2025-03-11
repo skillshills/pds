@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using UKParliament.CodeTest.Domain.Services;
-using UKParliament.CodeTest.Web.ViewModels;
+using UKParliament.CodeTest.Domain.ViewModels;
 
 namespace UKParliament.CodeTest.Web.Validators;
 
@@ -34,6 +34,7 @@ public class PersonRequestValidator : AbstractValidator<PersonViewModel>
     {
         return !string.IsNullOrEmpty(value?.Replace(" ", "").Trim());
     }
+
     private bool BeInThePast(DateOnly date)
     {
         return date < DateOnly.FromDateTime(DateTime.Now);

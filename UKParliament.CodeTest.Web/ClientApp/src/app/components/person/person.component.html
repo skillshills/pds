@@ -6,36 +6,32 @@
   <section class="content-container" aria-labelledby="form-title">
     <h2 id="form-title">{{ isUpdateMode ? 'Update Person' : 'Create Person' }}</h2>
 
-    <form [formGroup]="personForm" (ngSubmit)="onSubmit()" class="person-form" id="personForm"
-      aria-labelledby="form-title">
-      <div class="form-group">
-
+    <form [formGroup]="personForm" (ngSubmit)="onSubmit()" class="person-form" id="personForm" aria-labelledby="form-title">
+      <div class="form-group" [class.has-error]="formControlIsValid('firstname')">
         <div class="label-group">
           <label for="firstname">First name: <span class="required">*</span></label>
           <span class="validation-error" *ngIf="formControlIsValid('firstname')">required</span>
         </div>
 
-        <input id="firstname" type="text" formControlName="firstname" required placeholder="e.g John"
-          aria-required="true" />
+        <input id="firstname" type="text" formControlName="firstname" required placeholder="e.g John" aria-required="true" />
       </div>
 
-      <div class="form-group">
+      <div class="form-group" [class.has-error]="formControlIsValid('lastname')">
         <div class="label-group">
           <label for="lastname">Last name: <span class="required">*</span></label>
           <span class="validation-error" *ngIf="formControlIsValid('lastname')">required</span>
         </div>
 
-        <input id="lastname" type="text" formControlName="lastname" required placeholder="e.g Doe"
-          aria-required="true" />
+        <input id="lastname" type="text" formControlName="lastname" required placeholder="e.g Doe" aria-required="true" />
       </div>
 
-      <div class="form-group">
+      <div class="form-group" [class.has-error]="dobInvalid">
         <div class="label-group">
           <label>Date of Birth: <span class="required">*</span></label>
-          <span class="validation-error" *ngIf="dobInvalid">Invalid Date</span>
+          <span class="validation-error" *ngIf="dobInvalid">{{dobInvalidMessage}}</span>
         </div>
 
-        <div class="dob-group">
+        <div class="dob-group" [class.has-error]="dobInvalid">
           <select formControlName="day" required aria-required="true" aria-label="day">
             <option value="" disabled>Day</option>
             <option *ngFor="let d of days" [value]="d">{{ d }}</option>
@@ -53,8 +49,7 @@
         </div>
       </div>
 
-      <div class="form-group">
-
+      <div class="form-group" [class.has-error]="formControlIsValid('departmentId')">
         <div class="label-group">
           <label for="departmentId">Department: <span class="required">*</span></label>
           <span class="validation-error" *ngIf="formControlIsValid('departmentId')">required</span>
@@ -66,13 +61,13 @@
         </select>
       </div>
 
-      <button type="submit" class="primary-btn" title="{{ isUpdateMode ? 'Update' : 'Create' }}">{{ isUpdateMode ?
-        'Update' : 'Create' }}</button>
+      <button type="submit" class="primary-btn" title="{{ isUpdateMode ? 'Update' : 'Create' }}">
+        <span>{{ isUpdateMode ? 'Update' : 'Create' }}</span>
+      </button>
     </form>
   </section>
 
   <section class="navigation">
     <a (click)="backToHome()">Back</a>
   </section>
-
 </ng-template>
