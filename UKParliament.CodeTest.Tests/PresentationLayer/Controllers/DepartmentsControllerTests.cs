@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
-using UKParliament.CodeTest.Application.Extensions;
 using UKParliament.CodeTest.Domain.Models;
 using UKParliament.CodeTest.Domain.Services;
 using UKParliament.CodeTest.Domain.ViewModels;
@@ -11,44 +10,41 @@ namespace UKParliament.CodeTest.Tests.PresentationLayer.Controllers;
 
 public class DepartmentsControllerTests
 {
-    private readonly Mock<IDepartmentService> _mockService;
+    private readonly Mock<IDepartmentService> _departmentServiceMock;
     private readonly DepartmentsController _controller;
 
     public DepartmentsControllerTests()
     {
-        _mockService = new Mock<IDepartmentService>();
-        _controller = new DepartmentsController(_mockService.Object);
+        _departmentServiceMock = new Mock<IDepartmentService>();
+        _controller = new DepartmentsController(_departmentServiceMock.Object);
     }
 
     [Fact]
-    public async Task GetDepartmentByIdAsync_ReturnsOkResult_WithValidDepartment()
+    public async Task GetDepartmentByIdAsync_ShouldReturnDepartment_WhenDepartmentExists()
     {
         // Arrange
-        int departmentId = 1;
-        var mockDepartment = new DepartmentViewModel { Id = departmentId, Name = "HR" };
-
-        _mockService
-            .Setup(service => service.GetDepartmentByIdAsync(departmentId))
-            .ReturnsAsync(mockDepartment.ToDataModel());
+        var departmentId = 1;
+        var expectedDepartment = new DepartmentViewModel { Id = departmentId, Name = "HR" };
+        _departmentServiceMock.Setup(service => service.GetDepartmentByIdAsync(departmentId))
+            .ReturnsAsync(new Department { Id = departmentId, Name = "HR" });
 
         // Act
         var result = await _controller.GetDepartmentByIdAsync(departmentId);
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
-        var department = Assert.IsType<DepartmentViewModel>(okResult.Value);
-        Assert.Equal(departmentId, department.Id);
+        var actualDepartment = Assert.IsType<DepartmentViewModel>(okResult.Value);
+        Assert.Equal(expectedDepartment.Id, actualDepartment.Id);
+        Assert.Equal(expectedDepartment.Name, actualDepartment.Name);
     }
 
     [Fact]
-    public async Task GetDepartmentByIdAsync_ReturnsNotFound_WhenDepartmentDoesNotExist()
+    public async Task GetDepartmentByIdAsync_ShouldReturnNotFound_WhenDepartmentDoesNotExist()
     {
         // Arrange
-        int departmentId = 1;
-
-        _mockService
-             .Setup(service => service.GetDepartmentByIdAsync(departmentId))
-             .ReturnsAsync((Department?)null);
+        var departmentId = 1;
+        _departmentServiceMock.Setup(service => service.GetDepartmentByIdAsync(departmentId))
+            .ReturnsAsync((Department)null);
 
         // Act
         var result = await _controller.GetDepartmentByIdAsync(departmentId);
@@ -58,62 +54,48 @@ public class DepartmentsControllerTests
     }
 
     [Fact]
-    public async Task ListDepartments_ReturnsOkResult_WithDepartmentList()
+    public async Task ListDepartments_ShouldReturnListOfDepartments()
     {
         // Arrange
-        var departments = new List<DepartmentViewModel>
+        var expectedDepartments = new List<DepartmentViewModel>
         {
             new DepartmentViewModel { Id = 1, Name = "HR" },
             new DepartmentViewModel { Id = 2, Name = "IT" }
         };
-        _mockService
-            .Setup(service => service.ListDepartmentsAsync())
-            .ReturnsAsync(departments.Select(d => d.ToDataModel()).ToList());
+        _departmentServiceMock.Setup(service => service.ListDepartmentsAsync())
+            .ReturnsAsync(new List<Department>
+            {
+                new Department { Id = 1, Name = "HR" },
+                new Department { Id = 2, Name = "IT" }
+            });
 
         // Act
         var result = await _controller.ListDepartments();
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
-        var departmentList = Assert.IsType<List<DepartmentViewModel>>(okResult.Value);
-        Assert.Equal(2, departmentList.Count);
+        var actualDepartments = Assert.IsType<List<DepartmentViewModel>>(okResult.Value);
+        Assert.Equal(expectedDepartments.Count, actualDepartments.Count);
+        Assert.Equal(expectedDepartments[0].Id, actualDepartments[0].Id);
+        Assert.Equal(expectedDepartments[0].Name, actualDepartments[0].Name);
+        Assert.Equal(expectedDepartments[1].Id, actualDepartments[1].Id);
+        Assert.Equal(expectedDepartments[1].Name, actualDepartments[1].Name);
     }
 
     [Fact]
-    public async Task ListDepartments_ReturnsOkResult_WithEmptyList_WhenNoDepartmentsExist()
+    public async Task GetDepartmentTotalAsync_ShouldReturnDepartmentTotal()
     {
         // Arrange
-        _mockService
-            .Setup(service => service.ListDepartmentsAsync())
-            .ReturnsAsync([]);
-
-        // Act
-        var result = await _controller.ListDepartments();
-
-        // Assert
-        var okResult = Assert.IsType<OkObjectResult>(result.Result);
-        var departmentList = Assert.IsType<List<DepartmentViewModel>>(okResult.Value);
-        Assert.Empty(departmentList);
-    }
-
-    [Fact]
-    public async Task GetDepartmentTotalAsync_ReturnsOkResult_WithTotalCount()
-    {
-        // Arrange
-        int expectedTotal = 55;
-        _mockService.Setup(service => service.GetDepartmentTotalAsync()).ReturnsAsync(expectedTotal);
+        var expectedTotal = 5;
+        _departmentServiceMock.Setup(service => service.GetDepartmentTotalAsync())
+            .ReturnsAsync(expectedTotal);
 
         // Act
         var result = await _controller.GetDepartmentTotalAsync();
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
-        Assert.NotNull(okResult.Value);
-
-        // Use reflection to extract the 'total' property dynamically
-        var totalProperty = okResult.Value.GetType().GetProperty("total");
-        Assert.NotNull(totalProperty);
-
-        Assert.Equal(expectedTotal, totalProperty.GetValue(okResult.Value));
+        var actualTotal = Assert.IsType<int>(okResult.Value.GetType().GetProperty("total").GetValue(okResult.Value, null));
+        Assert.Equal(expectedTotal, actualTotal);
     }
 }

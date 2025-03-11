@@ -1,13 +1,13 @@
 ﻿using Moq;
 using UKParliament.CodeTest.Domain.Models;
-using UKParliament.CodeTest.Domain.Services;
+using UKParliament.CodeTest.Domain.Repositories;
 using Xunit;
 
-namespace UKParliament.CodeTest.Tests.ServiceLayer;
+namespace UKParliament.CodeTest.Tests.InfrastructureLayer.Repositories;
 
-public class PersonServiceTests
+public class PersonRepositoryTests
 {
-    private readonly Mock<IPersonService> _personServiceMock = new Mock<IPersonService>();
+    private readonly Mock<IPersonRepository> _personRepositoryMock = new Mock<IPersonRepository>();
 
     [Fact]
     public async Task CreatePersonAsync_ShouldCreatePerson()
@@ -15,13 +15,13 @@ public class PersonServiceTests
         // Arrange
         var newPerson = new Person { FirstName = "John", LastName = "Doe", DateOfBirth = new DateOnly(1990, 1, 1), DepartmentId = 1 };
         var expectedPerson = new Person { Id = 1, FirstName = "John", LastName = "Doe", DateOfBirth = new DateOnly(1990, 1, 1), DepartmentId = 1 };
-        _personServiceMock.Setup(service => service.CreatePersonAsync(newPerson)).ReturnsAsync(expectedPerson);
+        _personRepositoryMock.Setup(service => service.CreatePersonAsync(newPerson)).ReturnsAsync(expectedPerson);
 
         // Act
-        await _personServiceMock.Object.CreatePersonAsync(newPerson);
+        await _personRepositoryMock.Object.CreatePersonAsync(newPerson);
 
         // Assert
-        _personServiceMock.Verify(service => service.CreatePersonAsync(newPerson), Times.Once);
+        _personRepositoryMock.Verify(service => service.CreatePersonAsync(newPerson), Times.Once);
     }
 
     [Fact]
@@ -29,10 +29,10 @@ public class PersonServiceTests
     {
         // Arrange
         var expectedCount = 5;
-        _personServiceMock.Setup(service => service.GetPersonTotalAsync()).ReturnsAsync(expectedCount);
+        _personRepositoryMock.Setup(service => service.GetPersonTotalAsync()).ReturnsAsync(expectedCount);
 
         // Act
-        var actualCount = await _personServiceMock.Object.GetPersonTotalAsync();
+        var actualCount = await _personRepositoryMock.Object.GetPersonTotalAsync();
 
         // Assert
         Assert.Equal(expectedCount, actualCount);
@@ -47,10 +47,10 @@ public class PersonServiceTests
             new Person { Id = 1, FirstName = "John", LastName = "Doe", DateOfBirth = new DateOnly(1990, 1, 1), DepartmentId = 1 },
             new Person { Id = 2, FirstName = "Jane", LastName = "Doe", DateOfBirth = new DateOnly(1992, 2, 2), DepartmentId = 2 }
         };
-        _personServiceMock.Setup(service => service.GetPersonListAsync()).ReturnsAsync(expectedPeople);
+        _personRepositoryMock.Setup(service => service.GetPersonListAsync()).ReturnsAsync(expectedPeople);
 
         // Act
-        var actualPeople = await _personServiceMock.Object.GetPersonListAsync();
+        var actualPeople = await _personRepositoryMock.Object.GetPersonListAsync();
 
         // Assert
         Assert.Equal(expectedPeople, actualPeople);
@@ -62,10 +62,10 @@ public class PersonServiceTests
         // Arrange
         var personId = 1;
         var expectedPerson = new Person { Id = personId, FirstName = "John", LastName = "Doe", DateOfBirth = new DateOnly(1990, 1, 1), DepartmentId = 1 };
-        _personServiceMock.Setup(service => service.GetPersonByIdAsync(personId)).ReturnsAsync(expectedPerson);
+        _personRepositoryMock.Setup(service => service.GetPersonByIdAsync(personId)).ReturnsAsync(expectedPerson);
 
         // Act
-        var actualPerson = await _personServiceMock.Object.GetPersonByIdAsync(personId);
+        var actualPerson = await _personRepositoryMock.Object.GetPersonByIdAsync(personId);
 
         // Assert
         Assert.Equal(expectedPerson, actualPerson);
@@ -77,13 +77,13 @@ public class PersonServiceTests
         // Arrange
         var personId = 1;
         var updatedPerson = new Person { Id = personId, FirstName = "John", LastName = "Doe", DateOfBirth = new DateOnly(1990, 1, 1), DepartmentId = 1 };
-        _personServiceMock.Setup(service => service.UpdatePersonAsync(personId, updatedPerson)).Returns(Task.CompletedTask);
+        _personRepositoryMock.Setup(service => service.UpdatePersonAsync(personId, updatedPerson)).Returns(Task.CompletedTask);
 
         // Act
-        await _personServiceMock.Object.UpdatePersonAsync(personId, updatedPerson);
+        await _personRepositoryMock.Object.UpdatePersonAsync(personId, updatedPerson);
 
         // Assert
-        _personServiceMock.Verify(service => service.UpdatePersonAsync(personId, updatedPerson), Times.Once);
+        _personRepositoryMock.Verify(service => service.UpdatePersonAsync(personId, updatedPerson), Times.Once);
     }
 
     [Fact]
@@ -91,12 +91,12 @@ public class PersonServiceTests
     {
         // Arrange
         var personId = 1;
-        _personServiceMock.Setup(service => service.DeletePersonAsync(personId)).Returns(Task.CompletedTask);
+        _personRepositoryMock.Setup(service => service.DeletePersonAsync(personId)).Returns(Task.CompletedTask);
 
         // Act
-        await _personServiceMock.Object.DeletePersonAsync(personId);
+        await _personRepositoryMock.Object.DeletePersonAsync(personId);
 
         // Assert
-        _personServiceMock.Verify(service => service.DeletePersonAsync(personId), Times.Once);
+        _personRepositoryMock.Verify(service => service.DeletePersonAsync(personId), Times.Once);
     }
 }

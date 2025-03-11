@@ -3,7 +3,7 @@ using UKParliament.CodeTest.Domain.Models;
 using UKParliament.CodeTest.Domain.Services;
 using Xunit;
 
-namespace UKParliament.CodeTest.Tests.ServiceLayer;
+namespace UKParliament.CodeTest.Tests.ApplicationLayer.Services;
 
 public class DepartmentServiceTests
 {

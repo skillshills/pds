@@ -3,7 +3,7 @@ using UKParliament.CodeTest.Domain.Models;
 using UKParliament.CodeTest.Domain.ViewModels;
 using Xunit;
 
-namespace UKParliament.CodeTest.Tests.PresentationLayer.Mapping;
+namespace UKParliament.CodeTest.Tests.ApplicationLayer.Mapping;
 
 public class MappingTests
 {

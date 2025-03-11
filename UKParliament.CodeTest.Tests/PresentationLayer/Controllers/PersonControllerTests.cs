@@ -13,7 +13,6 @@ namespace UKParliament.CodeTest.Tests.PresentationLayer.Controllers;
 public class PersonControllerTests
 {
     private readonly Mock<IPersonService> _personServiceMock;
-    private readonly Mock<IDepartmentService> _departmentServiceMock;
     private readonly Mock<IValidator<PersonViewModel>> _validatorMock;
     private readonly PersonController _controller;
 
@@ -29,6 +28,7 @@ public class PersonControllerTests
     {
         // Arrange
         var person = new Person { Id = 1, FirstName = "John", LastName = "Doe" };
+
         _personServiceMock.Setup(service => service.GetPersonByIdAsync(1)).ReturnsAsync(person);
 
         // Act
@@ -58,6 +58,7 @@ public class PersonControllerTests
     {
         // Arrange
         var people = new List<Person> { new Person { Id = 1, FirstName = "John", LastName = "Doe" } };
+
         _personServiceMock.Setup(service => service.GetPersonListAsync()).ReturnsAsync(people);
 
         // Act
@@ -74,6 +75,7 @@ public class PersonControllerTests
     {
         // Arrange
         int expectedTotal = 42;
+
         _personServiceMock.Setup(service => service.GetPersonTotalAsync()).ReturnsAsync(expectedTotal);
 
         // Act
@@ -81,11 +83,33 @@ public class PersonControllerTests
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
-        Assert.NotNull(okResult.Value); 
-        
+        Assert.NotNull(okResult.Value);
+
         // Use reflection to extract the 'total' property dynamically
         var totalProperty = okResult.Value.GetType().GetProperty("total");
-        Assert.NotNull(totalProperty); 
+        Assert.NotNull(totalProperty);
+
+        Assert.Equal(expectedTotal, totalProperty.GetValue(okResult.Value));
+    }
+
+    [Fact]
+    public async Task GetPersonTotalAsync_ReturnsOk_WithZeroTotalCount()
+    {
+        // Arrange
+        int expectedTotal = 0;
+
+        _personServiceMock.Setup(service => service.GetPersonTotalAsync()).ReturnsAsync(expectedTotal);
+
+        // Act
+        var result = await _controller.GetPersonTotalAsync();
+
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result.Result);
+        Assert.NotNull(okResult.Value);
+
+        // Use reflection to extract the 'total' property dynamically
+        var totalProperty = okResult.Value.GetType().GetProperty("total");
+        Assert.NotNull(totalProperty);
 
         Assert.Equal(expectedTotal, totalProperty.GetValue(okResult.Value));
     }
@@ -94,8 +118,9 @@ public class PersonControllerTests
     public async Task CreatePersonAsync_ReturnsCreatedAtRoute_WhenPersonIsValid()
     {
         // Arrange
-        var newPerson = new PersonViewModel { Id = 1, FirstName = "John", LastName = "Doe" };
+        var newPerson = new PersonViewModel { Id = 1, FirstName = "John", LastName = "Doe", DepartmentId = 1, DateOfBirth = new DateOnly(1978, 3, 14) };
         var person = new Person { Id = 1, FirstName = "John", LastName = "Doe" };
+
         _validatorMock.Setup(v => v.ValidateAsync(newPerson, default)).ReturnsAsync(new ValidationResult());
         _personServiceMock.Setup(service => service.CreatePersonAsync(It.IsAny<Person>())).ReturnsAsync(person);
 
@@ -114,6 +139,7 @@ public class PersonControllerTests
         // Arrange
         var newPerson = new PersonViewModel { Id = 1, FirstName = "", LastName = "Doe" };
         var validationResult = new ValidationResult(new List<ValidationFailure> { new ValidationFailure("FirstName", "Error") });
+
         _validatorMock.Setup(v => v.ValidateAsync(newPerson, default)).ReturnsAsync(validationResult);
 
         // Act
@@ -146,6 +172,7 @@ public class PersonControllerTests
         // Arrange
         var personViewModel = new PersonViewModel { Id = 1, FirstName = "John", LastName = "Doe" };
         var validationResult = new ValidationResult(new List<ValidationFailure> { new ValidationFailure("DateOfBirth", "Error") });
+
         _validatorMock.Setup(v => v.ValidateAsync(personViewModel, default)).ReturnsAsync(validationResult);
 
         // Act
@@ -160,6 +187,7 @@ public class PersonControllerTests
     {
         // Arrange
         var personViewModel = new PersonViewModel { Id = 1, FirstName = "John", LastName = "Doe" };
+
         _validatorMock.Setup(v => v.ValidateAsync(personViewModel, default)).ReturnsAsync(new ValidationResult());
         _personServiceMock.Setup(service => service.GetPersonByIdAsync(1)).ReturnsAsync((Person)null);
 
@@ -175,6 +203,7 @@ public class PersonControllerTests
     {
         // Arrange
         var person = new Person { Id = 1, FirstName = "John", LastName = "Doe" };
+
         _personServiceMock.Setup(service => service.GetPersonByIdAsync(1)).ReturnsAsync(person);
 
         // Act
